@@ -3,13 +3,18 @@ package domain;
 import database.EmployeeDA;
 import exceptions.RecordNotFoundException;
 import java.io.Serializable;
+import java.sql.SQLException;
 
 import java.util.Date;
 
 import java.util.ArrayList;
 
 public abstract class Employee implements Serializable{
+    public static final int HOURLY = 1;
+    public static final int SALARY = 2;
+    
     private int employeeID;
+    private int employeeType;
     private String firstName;
     private String lastName;
     private long SSN;
@@ -26,19 +31,27 @@ public abstract class Employee implements Serializable{
         return 0.0;
     }
     
-    public static Employee find(int ID){
+    public static Employee find(int ID) throws RecordNotFoundException, SQLException{
         return EmployeeDA.find(ID);
     }
     
-    public static Employee findByUserID(String userID)throws RecordNotFoundException{
+    public static Employee findByUserID(String userID)throws RecordNotFoundException, SQLException{
         return EmployeeDA.findByUserID(userID);
     }
 
     public int getEmployeeID() {
         return employeeID;
     }
+
+    public int getEmployeeType() {
+        return employeeType;
+    }
+
+    public void setEmployeeType(int employeeType) {
+        this.employeeType = employeeType;
+    }
     
-    public static ArrayList<Employee> getEmployees() {
+    public static ArrayList<Employee> getEmployees() throws SQLException, RecordNotFoundException {
         return EmployeeDA.getEmployees();
     }
 

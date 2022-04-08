@@ -1,13 +1,17 @@
 package domain;
 
 import database.PayrollDA;
+import exceptions.RecordNotFoundException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.DateFormat;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Payroll implements Serializable{
     private Date date;
@@ -22,7 +26,7 @@ public class Payroll implements Serializable{
         PayrollDA.add(this);
     }
     
-    public static void calculatePayroll(Date date) {
+    public static void calculatePayroll(Date date) throws SQLException, RecordNotFoundException {
         ArrayList<Employee> employees = Employee.getEmployees();
         ArrayList<WithholdingType>withholdingTypes = WithholdingType.getWithholdingTypes(); 
         
@@ -119,7 +123,14 @@ public class Payroll implements Serializable{
     }
     
     public String toString(){
-        Employee emp = Employee.find(employeeID);
+        Employee emp = null;
+        try {
+            emp = Employee.find(employeeID);
+        } catch (RecordNotFoundException ex) {
+            Logger.getLogger(Payroll.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Payroll.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return getDateFormatted() + "  " + employeeID + "  " + emp.getLastName() + ",  "+ emp.getFirstName() + "  " + getGrossPayFormatted() + "  " + getTotalDeductionsFormatted() + "  " + getNetPayFormatted();
     }
 }

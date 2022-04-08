@@ -4,6 +4,7 @@ import database.PayrollSystemDA;
 import domain.Payroll;
 import exceptions.LoginException;
 import exceptions.RecordNotFoundException;
+import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,14 +13,14 @@ import java.util.Date;
 public class PayrollSystem {
     private static boolean isInitialized = false;
 
-    public static void initialize() {
+    public static void initialize() throws SQLException {
         
         if (!isInitialized)
             PayrollSystemDA.initialize();
         isInitialized = true;
     }
     
-    public static Employee login(String userID, String password) throws LoginException {
+    public static Employee login(String userID, String password) throws LoginException, SQLException {
         Employee employee = null;
         
         try{

@@ -1,13 +1,17 @@
 package domain;
 
 import database.TimecardDA;
+import exceptions.RecordNotFoundException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
 
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Timecard implements Serializable{
     private int timecardID;
@@ -31,7 +35,7 @@ public class Timecard implements Serializable{
         TimecardDA.delete(this);
     }
     
-    public static Timecard find(int id){
+    public static Timecard find(int id) throws RecordNotFoundException, SQLException{
         return TimecardDA.find(id);
     }
 
@@ -52,12 +56,24 @@ public class Timecard implements Serializable{
         return employeeID;
     }
     
-    public static ArrayList<Timecard> getEmployeeTimecards(int ID){
-        return TimecardDA.getEmployeeTimecards(ID);
+    public static ArrayList<Timecard> getEmployeeTimecards(int ID) throws SQLException, RecordNotFoundException{
+        try {
+            return TimecardDA.getEmployeeTimecards(ID);
+        } catch (RecordNotFoundException ex) {
+            Logger.getLogger(Timecard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Timecard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    public static ArrayList<Timecard> getEmployeeTimecards(int ID, Date begDate, Date endDate) {
-        return TimecardDA.getEmployeeTimecards(ID, begDate, endDate);
+    public static ArrayList<Timecard> getEmployeeTimecards(int ID, Date begDate, Date endDate) throws SQLException, RecordNotFoundException {
+        try {
+            return TimecardDA.getEmployeeTimecards(ID, begDate, endDate);
+        } catch (RecordNotFoundException ex) {
+            Logger.getLogger(Timecard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public double getHoursWorked() {
@@ -108,7 +124,13 @@ public class Timecard implements Serializable{
         return getDateFormatted() + "  " + employeeID + "  " + hoursWorked + "  " + overtimeHours;
     }
     
-    public void update(){
-        TimecardDA.update(this);
+    public void update() throws RecordNotFoundException, SQLException{
+        try {
+            TimecardDA.update(this);
+        } catch (RecordNotFoundException ex) {
+            Logger.getLogger(Timecard.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Timecard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

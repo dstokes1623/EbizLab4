@@ -6,21 +6,23 @@ import java.sql.SQLException;
 
 public class PayrollSystemDA {
     private static Connection connection;
+    private static boolean isInitialized = false;
     
     public static void initialize() throws SQLException {
 //        EmployeeDA.initialize();
 //        TimecardDA.initialize();
-        try{
-             Connection connection;
-             connection = DriverManager.getConnection("jdbc:derby://localhost:1527/PayrollSystemDB", "CIS640", "cis640");
-        } catch(Exception e){
-            System.out.println(e);
+        if(isInitialized == false){
+            connection = DriverManager.getConnection("jdbc:derby://localhost:1527/PayrollSystemDB", "CIS640", "cis640");
+            System.out.println("PayrollSytemDA.initialize connection = " + connection);
+            WithholdingTypeDA.initialize();
         }
          
-        WithholdingTypeDA.initialize();
+         
+        
     }
 
     public static Connection getConnection() {
+        System.out.println("PayrollSytemDA.getConnection connection = " + connection);
         return connection;
     }
     

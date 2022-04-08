@@ -1,5 +1,6 @@
 drop table Employee;
 drop table Hourly_Employee;
+drop table Salary_Employee;
 drop table Timecard;
 
 CREATE TABLE Employee (
@@ -30,6 +31,17 @@ INSERT INTO Hourly_Employee
   (Employee_ID, Hourly_Rate, Overtime_Rate)
 VALUES 
   (1001, 12.75, 1.5);
+CREATE TABLE Salary_Employee (
+  Employee_ID INT NOT NULL,
+  Salary DOUBLE,
+  
+  PRIMARY KEY(Employee_ID) 
+);
+
+INSERT INTO Salary_Employee 
+  (Employee_ID, Salary)
+VALUES 
+  (1002, 60000);
 
 CREATE TABLE Timecard (
     Timecard_ID INT NOT NULL GENERATED ALWAYS AS IDENTITY,    
