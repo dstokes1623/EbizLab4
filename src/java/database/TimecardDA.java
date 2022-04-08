@@ -18,22 +18,22 @@ public class TimecardDA {
     public static void add(Timecard tc) {
         
         int timecardID = tc.getTimecardID();
-        Date date = tc.getDate();
+        String date = tc.getDateFormatted();
         int employeeID = tc.getEmployeeID();
         double hoursWorked = tc.getHoursWorked();
         double overtimeHours = tc.getOvertimeHours();
 
         String sqlString = "INSERT INTO Timecard " 
-                           + "(Timecard_Date, Employee_ID, Hours_Worked, Overtime_Hours)"
+                           + "(Timecard_Date, Employee_ID, Hours_Worked, Overtime_Hours) "
                 + "Values "
-                + "(" + timecardID + ", " + date + ", " + employeeID + ", " + hoursWorked + ", " + overtimeHours + ")";
-        
+                + "('" + date + "', " + employeeID + ", " + hoursWorked + ", " + overtimeHours + ")";
+        System.out.println(sqlString);
         Connection connection = PayrollSystemDA.getConnection();
         
         try{
           Statement statement = connection.createStatement();  
           
-          statement.executeUpdate(sqlString);
+          statement.execute(sqlString);
         }
         catch(Exception e){
             System.out.println(e);
@@ -51,7 +51,7 @@ public class TimecardDA {
         try{
           Statement statement = connection.createStatement();  
           
-          statement.executeUpdate(sqlString);
+          statement.execute(sqlString);
         }
         catch(Exception e){
             System.out.println(e);
@@ -66,9 +66,9 @@ public class TimecardDA {
         double hoursWorked;
         double overtimeHours;
 
-        String sqlString = "Select Timecard_ID, Date, Employee_ID, SSN, Hours_Worked, Overtime_Hours "
+        String sqlString = "Select Timecard_ID, Timecard_Date, Employee_ID, Hours_Worked, Overtime_Hours "
                 + "From Timecard "
-                + "Where Timecard_ID = '" + id + "'";
+                + "Where Timecard_ID = " + id;
 
         System.out.println(sqlString);
         System.out.println("getting connection");
@@ -96,21 +96,17 @@ public class TimecardDA {
          
 
            
-
+            timecard = new Timecard();
             timecard.setTimecardID(timecardID);
             timecard.setDate(date);
             timecard.setEmployeeID(employeeID);
             timecard.setHoursWorked(hoursWorked);
             timecard.setOvertimeHours(overtimeHours);
-
+            statement.close();
         } catch (Exception e) {
             System.out.println("Exception = " + e);
             RecordNotFoundException ex = new RecordNotFoundException("Timecard " + id + " not found.");
             throw ex;
-        } finally {
-
-            connection.close();
-
         }
         System.out.println(timecard);
         return timecard;
@@ -129,9 +125,9 @@ public class TimecardDA {
         double hoursWorked;
         double overtimeHours;
 
-        String sqlString = "Select Timecard_ID, Date, Employee_ID, Hours_Worked, Overtime_Hours "
+        String sqlString = "Select Timecard_ID, Timecard_Date, Employee_ID, Hours_Worked, Overtime_Hours "
                 + "From Timecard "
-                + "Where Employee_ID = '" + ID + "'";
+                + "Where Employee_ID = " + ID;
 
         System.out.println(sqlString);
         System.out.println("getting connection");
@@ -155,7 +151,8 @@ public class TimecardDA {
                 System.out.println(hoursWorked);
                 overtimeHours = rs.getDouble(5);
                 System.out.println(overtimeHours);
-
+                
+                timecard = new Timecard();
                 timecard.setTimecardID(timecardID);
                 timecard.setDate(date);
                 timecard.setEmployeeID(employeeID);
@@ -164,15 +161,11 @@ public class TimecardDA {
                 
                 employeeTimecards.add(timecard);
             }
-           
+           statement.close();
 
         } catch (Exception e) {
             System.out.println("Exception = " + e);
-        } finally {
-
-            con.close();
-
-        }
+        } 
         return employeeTimecards;
     }
     
@@ -186,9 +179,9 @@ public class TimecardDA {
         double hoursWorked;
         double overtimeHours;
 
-        String sqlString = "Select Timecard_ID, Date, Employee_ID, Hours_Worked, Overtime_Hours "
+        String sqlString = "Select Timecard_ID, Timecard_Date, Employee_ID, Hours_Worked, Overtime_Hours "
                 + "From Timecard "
-                + "Where Employee_ID = " + ID + "AND Date between '" + begDate + "' and '" + endDate + "'";
+                + "Where Employee_ID = " + ID + "AND Timecard_Date between '" + begDate + "' and '" + endDate + "'";
 
         System.out.println(sqlString);
         System.out.println("getting connection");
@@ -212,7 +205,8 @@ public class TimecardDA {
                 System.out.println(hoursWorked);
                 overtimeHours = rs.getDouble(5);
                 System.out.println(overtimeHours);
-
+                
+                timecard = new Timecard();
                 timecard.setTimecardID(timecardID);
                 timecard.setDate(date);
                 timecard.setEmployeeID(employeeID);
@@ -221,37 +215,34 @@ public class TimecardDA {
                 
                 employeeTimecards.add(timecard);
             }
-           
+           statement.close();
 
         } catch (Exception e) {
             System.out.println("Exception = " + e);
             RecordNotFoundException ex = new RecordNotFoundException("Timecards for employee " + ID + " not found.");
             throw ex;
-        } finally {
-
-            connection.close();
-
-        }
+        } 
         return employeeTimecards;
         
     }
     
     public static void update(Timecard tc) throws RecordNotFoundException, SQLException {
         Timecard timecard = find(tc.getTimecardID());
-        Date date = tc.getDate();
+        String date = tc.getDateFormatted();
+        System.out.println(date);
         double hoursWorked = tc.getHoursWorked();
         double overtimeHours = tc.getOvertimeHours();
         
         String sqlString = "Update Timecard " + 
-                            "Set Date = '" + date + "', Hours_Worked = " + hoursWorked + ", Overtime_Hours = " + overtimeHours +
+                            "Set Timecard_Date = '" + date + "', Hours_Worked = " + hoursWorked + ", Overtime_Hours = " + overtimeHours +
                             "Where Timecard_ID = " + tc.getTimecardID();
-        
+        System.out.println(sqlString);
         Connection connection = PayrollSystemDA.getConnection();
         
         try{
           Statement statement = connection.createStatement();  
           
-          statement.executeUpdate(sqlString);
+          statement.execute(sqlString);
         }
         catch(Exception e){
             System.out.println(e);

@@ -114,16 +114,14 @@ public class EmployeeDA {
             employee.setSSN(SSN);
             employee.setUserID(userName);
             employee.setPassword(password);
+            
+            statement.close();
 
         } catch (Exception e) {
             System.out.println("Exception = " + e);
             RecordNotFoundException ex = new RecordNotFoundException("Employee " + ID + " not found.");
             throw ex;
-        } finally {
-
-            connection.close();
-
-        }
+        } 
         System.out.println(employee);
         return employee;
     }
@@ -203,16 +201,14 @@ public class EmployeeDA {
             employee.setSSN(SSN);
             employee.setUserID(userName);
             employee.setPassword(password);
+            
+            statement.close();
 
         } catch (Exception e) {
             System.out.println("Exception = " + e);
             RecordNotFoundException ex = new RecordNotFoundException("Employee " + userID + " not found.");
             throw ex;
-        } finally {
-
-            connection.close();
-
-        }
+        } 
         System.out.println(employee);
         return employee;
     }
@@ -293,16 +289,13 @@ public class EmployeeDA {
                 employee.setPassword(password);
 
                 employees.add(employee);
-
+                
+                statement.close();
             }
         } catch (Exception e) {
             System.out.println("Exception = " + e);
             RecordNotFoundException ex = new RecordNotFoundException("Employees not found");
             throw ex;
-        } finally {
-
-            connection.close();
-
         }
         return employees;
     }

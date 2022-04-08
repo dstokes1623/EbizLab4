@@ -4,7 +4,7 @@ import database.TimecardDA;
 import exceptions.RecordNotFoundException;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 
 import java.util.ArrayList;
@@ -44,11 +44,12 @@ public class Timecard implements Serializable{
     }
     
     public String getDateShort(){
-        return DateFormat.getDateInstance(DateFormat.SHORT).format(date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        return dateFormat.format(date);
     } 
     
     public String getDateFormatted(){
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         return dateFormat.format(date);
     }
 

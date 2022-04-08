@@ -15,6 +15,8 @@ public class PayrollSystemDA {
             connection = DriverManager.getConnection("jdbc:derby://localhost:1527/PayrollSystemDB", "CIS640", "cis640");
             System.out.println("PayrollSytemDA.initialize connection = " + connection);
             WithholdingTypeDA.initialize();
+            
+            isInitialized = true;
         }
          
          
